@@ -6,14 +6,31 @@
     этому правилу. Придумайте несколько способов решения задачи и сравните их.
 '''
 
+#============================   First variant   ===============================#
 import re
 
 def checkLogin(login):
-    if len(login) < 1 or len(login) > 20: return False
+    if len(login) not in range(1, 21): return False
     if re.match(r'(^[A-Za-z]+[A-Za-z\d.-]*[A-Za-z\d]{1}$)', login):
         return True
     else:
         return False
+
+
+#===========================   Second variant   ===============================#
+letters = 'abcdefghijklmnopqrstuvwxyz'
+letters += letters.upper()
+numbers = '0123456789'
+signs   = '.-'
+allowed = letters + numbers + signs
+
+def checkLogin2(login):
+    if len(login) < 1 or len(login) > 20: return False
+    if (login[0] not in letters or login[-1] not in (letters + numbers)):
+        return False
+    for symbol in login[1:-1]:
+        if symbol not in allowed: return False
+    return True
 
 
 if __name__ == '__main__':
@@ -23,3 +40,10 @@ if __name__ == '__main__':
     assert checkLogin('App$e') == False, 'should contain only latin letters, numbers, "." or "-"'
     assert checkLogin('') == False, 'login length must be at least 1 charackter'
     assert checkLogin('abcdefghklmnopqrstuvwxyz') == False, 'login length mustn\'t be more than 20 charackters'
+
+    assert checkLogin2('app1e') == True, 'checkLogin'
+    assert checkLogin2('0e.g-g') == False, 'must start with latin letter'
+    assert checkLogin2('Apple-') == False, 'must end with latin letter or number'
+    assert checkLogin2('App$e') == False, 'should contain only latin letters, numbers, "." or "-"'
+    assert checkLogin2('') == False, 'login length must be at least 1 charackter'
+    assert checkLogin2('abcdefghklmnopqrstuvwxyz') == False, 'login length mustn\'t be more than 20 charackters'
