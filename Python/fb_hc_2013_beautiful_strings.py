@@ -62,6 +62,17 @@ def beauty2(string):
     return sum(values[letter] for letter in string if letter in values)
 
 
+def beauty3(string):
+    '''
+    Define the beauty of the given string (based on generators variant)
+    '''
+    string = string.lower()
+    values = {letter: 26 - i for i, letter in enumerate(
+                sorted(set((char for char in string if char in ascii_lowercase)),
+                        key=lambda letter: string.count(letter), reverse=True))}
+    return sum(values[letter] for letter in string if letter in values)
+
+
 if __name__ == '__main__':
     '''
     Note: speed test results may vary. For clear results run test couple times.
@@ -84,4 +95,13 @@ if __name__ == '__main__':
     assert beauty2('Sometimes test cases are hard to make up.') == 729, 'fourth'
     assert beauty2('So I just go consult Professor Dalves') == 646, 'fifth'
     sleep(1)    # can't mesuare productivity without delay
-    print('beauty()  test done in', '%.15f' % (time() - start - delay))
+    print('beauty2() test done in', '%.15f' % (time() - start - delay))
+
+    start = time()
+    assert beauty3('ABbCcc') == 152, 'first'
+    assert beauty3('Good luck in the Facebook Hacker Cup this year!') == 754, 'second'
+    assert beauty3('Ignore punctuation, please :)') == 491, 'third'
+    assert beauty3('Sometimes test cases are hard to make up.') == 729, 'fourth'
+    assert beauty3('So I just go consult Professor Dalves') == 646, 'fifth'
+    sleep(1)
+    print('beauty3() test done in', '%.15f' % (time() - start - 1))
