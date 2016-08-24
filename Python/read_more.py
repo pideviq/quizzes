@@ -21,26 +21,30 @@
 '''
 
 
-def trimmer(line):
-    line = line.strip()
+def trimmer(text, edge=55, limit=40, ending='... <Read More>'):
+    text = text.strip()
+    if len(text) <= edge:
+        return text
 
-    if len(line) <= 55:
-        return line
-    else:
+    text = text.split('\n')
+    result = []
+    for i, line in enumerate(text):
+        if limit <= 0:
+            break
+
         line = line.split(' ')
-        result, limit = [], 40
+        # check length of the first word -> shrink it if needed
+        if i == 0 and len(line[0]) >= limit:
+            return line[0][:limit] + ending
 
-        if len(line[0]) >= limit:
-            return line[0][:limit] + '... <Read More>'
-
+        result.append([])
         for word in line:
             limit -= len(word)
             if limit > 0:
-                result.append(word)
-            else:
-                break
-            limit -= 1      # count space
-        return ' '.join(result) + '... <Read More>'
+                result[i].append(word)
+                limit -= 1      # count space
+        limit -= 1      # count new string
+    return '\n'.join(' '.join(line) for line in result if line) + ending
 
 
 if __name__ == '__main__':
@@ -61,3 +65,9 @@ if __name__ == '__main__':
     assert trimmer('123456789A123456789B123456789C123456789 123456789E1234 6') \
            == '123456789A123456789B123456789C123456789... <Read More>', \
            'seventh'
+    assert trimmer('Title\nSubtitle\nMain content goes here. The structure of' \
+                   ' the post must be saved.') == \
+           'Title\nSubtitle\nMain content goes... <Read More>', 'eighth'
+    assert trimmer('Ten letters\nTen letters\nTen letters\nTen letters\nTen '\
+                   'letters\nTen letters\nTen letters\nTen letters\n') == \
+           'Ten letters\nTen letters\nTen letters... <Read More>', 'ninth'
