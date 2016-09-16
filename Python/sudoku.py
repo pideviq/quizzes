@@ -53,7 +53,7 @@ def sudoku(line):
                               for j in range(rgn_col, rgn_col + rgn_size)]
                     if not validator(region, N):
                         return 'False'
-    return 'True' if rows and cols else 'False'
+    return str(rows and cols)
 
 
 if __name__ == '__main__':
@@ -69,7 +69,8 @@ if __name__ == '__main__':
                    ',7,8,2,5,4,5,6,2,3,4,9,4,4,3,5,5,5,6,5,4,3,2,2,1,8,1,5,3,' \
                    '9,4,7,8,2,3,5,6,5,6,4,1,7,7,6,4,3,3,1,1,1,9,3,8,7', 'False'),
                   ('5;1,4,2,3,2,3,1,4,4,2,3,1,3,1,4,2\n', 'False'),
-                  ('4;1,4,2,3,2,3,1,4,4,2,3,1,3,1,4,2,1\n', 'False')]
+                  ('4;1,4,2,3,2,3,1,4,4,2,3,1,3,1,4,2,1\n', 'False'),
+                  ('4;1,4,2,5,2,3,1,4,4,2,3,1,3,1,4,2\n', 'False')]
 
     for test in test_cases:
         assert sudoku(test[0]) == test[1], 'failed %s' % test[0]
