@@ -38,13 +38,11 @@ def censor(line):
 
     final = []
     for word in original:
-        for truth in approved:
-            index = word.find(truth)
-            if index > -1:
-                final.append('_' * len(word[:index]) + truth +
-                             '_' * len(word[index + len(truth):]))
-                approved.remove(truth)
-                break
+        index = word.find(approved[0]) if approved else -1
+        if index > -1:
+            final.append('_' * len(word[:index]) + approved[0] +
+                         '_' * len(word[index + len(approved[0]):]))
+            approved.pop(0)
         else:
             final.append('_' * len(word))
     return ' '.join(final) if not approved else 'I cannot fix history'
@@ -61,7 +59,10 @@ if __name__ == '__main__':
                    '_____ ______NgW _______ ____eYTkVavg_ ____'),
                   ('ffa   fj;', '___ __'),
                   ('ya Preved to Medved;Preved ed', '__ Preved __ _ed___'),
-                  ('bjc degb jehc;tqll', 'I cannot fix history')]
+                  ('bjc degb jehc;tqll', 'I cannot fix history'),
+                  ('bjc degb jehc;je bj', 'I cannot fix history'),
+                  ('The string with wrong order;ron ring',
+                   'I cannot fix history')]
 
     for i, test in enumerate(test_cases):
         assert censor(test[0]) == test[1], 'failed test No. %d' % i
