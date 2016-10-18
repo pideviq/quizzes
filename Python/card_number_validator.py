@@ -63,7 +63,7 @@ def validator(cc):
     cc = original_cc.replace(' ', '')[::-1]
     # verify that card number consists only of numbers and has the right length
     if not cc.isdigit():
-        print(original_cc, 'Card number must contain only digits and spaces.')
+        print(original_cc, '- Card number must contain only digits and spaces.')
         return '0'
     if len(cc) not in range(12, 20):
         print(original_cc,
